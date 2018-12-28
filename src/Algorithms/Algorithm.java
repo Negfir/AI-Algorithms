@@ -1,20 +1,21 @@
 package Algorithms;
 import Problems.Problem;
+import Problems.State;
 public abstract class Algorithm {
 
     public Problem problem;
-    public int visitedNodesNo;
-    public int expandedNodesNo;
-    public int maxMemoryUse;
+    public int exploredCnt;
+    public int frontierCnt;
+    public int memUsage;
 
     public Algorithm(Problem problem){
         this.problem = problem;
-        visitedNodesNo = 0;
-        expandedNodesNo = 0;
-        maxMemoryUse = 0;
+        exploredCnt = 0;
+        frontierCnt = 0;
+        memUsage = 0;
     }
 
-    public abstract void run();
+    //public abstract void run();
 
-    public abstract Problem.State getNextState();
+   // public abstract State getNextState();
 }
