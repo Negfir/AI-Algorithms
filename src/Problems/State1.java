@@ -1,6 +1,8 @@
 package Problems;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
 
 public class State1 implements State{
 
@@ -15,7 +17,12 @@ public class State1 implements State{
     @Override
     public boolean isEquals(State s){
         State1 ps = (State1)s;
-        return (ps.isPassed == isPassed && ps.notPassed == notPassed);
+        return (new HashSet<>(isPassed).equals(new HashSet<>(ps.isPassed))) && (new HashSet<>(notPassed).equals(new HashSet<>(ps.notPassed)));
+    }
+
+    @Override
+    public void print(){
+        System.out.println("is Passed:"+isPassed+"-"+"not Passed"+notPassed);
     }
 
 

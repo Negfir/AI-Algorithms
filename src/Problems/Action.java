@@ -2,7 +2,9 @@ package Problems;
 
 public class Action {
     public int actionType;
-    public Action(int a){
+    public String s;
+    public Action(int a, String s){
         actionType = a;
+        this.s=s;
     }
 }

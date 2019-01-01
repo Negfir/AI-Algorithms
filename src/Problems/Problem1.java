@@ -3,22 +3,26 @@ package Problems;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Problem1 implements Problem {
 
     public ArrayList<String> isPassed=new ArrayList<String>();
     public ArrayList<String> notPassed=new ArrayList<String>();
 
+public  int node;
 
     public Problem1(){
+        node=0;
         notPassed.add("A1");
         notPassed.add("A2");
         notPassed.add("B1");
-        notPassed.add("B2");
-        notPassed.add("C1");
+
         notPassed.add("C2");
         notPassed.add("D1");
         notPassed.add("D2");
+        notPassed.add("B2");
+        notPassed.add("C1");
 
 
     }
@@ -59,38 +63,41 @@ public class Problem1 implements Problem {
 
         State1 s1 = (State1)s;
         ArrayList<Action> acts = new ArrayList<>();
+
         if(s1.notPassed.contains("A1")) {
-            if(s1.notPassed.contains("A2")) acts.add(new Action(1));
-            if(s1.notPassed.contains("B1")) acts.add(new Action(2));
-            if(s1.notPassed.contains("C1")) acts.add(new Action(3));
-            if(s1.notPassed.contains("D1")) acts.add(new Action(4));
-            acts.add(new Action(5));}
+            if(s1.notPassed.contains("A2")) acts.add(new Action(1,"A1,A2"));
+            if(s1.notPassed.contains("B1")) acts.add(new Action(2,"A1,B1"));
+            if(s1.notPassed.contains("C1")) acts.add(new Action(3,"A1,C1"));
+            if(s1.notPassed.contains("D1")) acts.add(new Action(4,"A1,D1"));
+            acts.add(new Action(5,"A1"));}
         if(s1.notPassed.contains("A2")) {
-            if(s1.notPassed.contains("B2")) acts.add(new Action(6));
-            if(s1.notPassed.contains("C2")) acts.add(new Action(7));
-            if(s1.notPassed.contains("D2")) acts.add(new Action(8));
-            acts.add(new Action(9));}
+            if(s1.notPassed.contains("B2")) acts.add(new Action(6,"A2,B2"));
+            if(s1.notPassed.contains("C2")) acts.add(new Action(7,"A2,C2"));
+            if(s1.notPassed.contains("D2")) acts.add(new Action(8,"A2,D2"));
+            acts.add(new Action(9,"A2"));}
+
         if(s1.notPassed.contains("B1")) {
-            if(s1.notPassed.contains("B2")) acts.add(new Action(10));
-            if(s1.notPassed.contains("C1")) acts.add(new Action(11));
-            if(s1.notPassed.contains("D1")) acts.add(new Action(12));
-            acts.add(new Action(13));}
+            if(s1.notPassed.contains("B2")) acts.add(new Action(10,"B1,B2"));
+            if(s1.notPassed.contains("C1")) acts.add(new Action(11,"B1,C1"));
+            if(s1.notPassed.contains("D1")) acts.add(new Action(12,"B1,D1"));
+            acts.add(new Action(13,"B1"));}
         if(s1.notPassed.contains("B2")) {
-            if(s1.notPassed.contains("C2")) acts.add(new Action(14));
-            if(s1.notPassed.contains("D2")) acts.add(new Action(15));
-            acts.add(new Action(16));}
+            if(s1.notPassed.contains("C2")) acts.add(new Action(14,"B2,C2"));
+            if(s1.notPassed.contains("D2")) acts.add(new Action(15,"B2,D2"));
+            acts.add(new Action(16,"B2"));}
         if(s1.notPassed.contains("C1")) {
-            if(s1.notPassed.contains("C2")) acts.add(new Action(17));
-            if(s1.notPassed.contains("D1")) acts.add(new Action(18));
-            acts.add(new Action(19));}
+            if(s1.notPassed.contains("C2")) acts.add(new Action(17,"C1,C2"));
+            if(s1.notPassed.contains("D1")) acts.add(new Action(18,"C1,D1"));
+            acts.add(new Action(1,"C1"));}
         if(s1.notPassed.contains("C2")) {
-            if(s1.notPassed.contains("D2")) acts.add(new Action(20));
-            acts.add(new Action(21));}
+            if(s1.notPassed.contains("D2")) acts.add(new Action(20,"C2,D2"));
+            acts.add(new Action(21,"C2"));}
         if(s1.notPassed.contains("D1")) {
-            if(s1.notPassed.contains("D2")) acts.add(new Action(22));
-            acts.add(new Action(23));}
+            if(s1.notPassed.contains("D2")) acts.add(new Action(22,"D1,D2"));
+            acts.add(new Action(23,"D1"));}
+        //jj
         if(s1.notPassed.contains("D2")) {
-            acts.add(new Action(24));}
+            acts.add(new Action(24,"D2"));}
         return acts;
     }
 
@@ -250,18 +257,30 @@ public class Problem1 implements Problem {
 
         ArrayList<State> nextState = new ArrayList<>();
         nextState.add(new State1(isP,notP));
+        node++;
 
         for (String i: isP){
-            System.out.println(i+"-k");
+            System.out.print(i+"-");
         }
 
 
         return nextState;
     }
-
+@Override
+    public int getNode(){
+        return node;
+    }
+    @Override
+    public boolean goalTestBi(State s1,State s2) {
+        State s11 = (State1) s1;
+        State s21 = (State1) s2;
+        return (new HashSet<>(((State1) s11).isPassed).equals(new HashSet<>(((State1) s21).isPassed))) && (new HashSet<>(((State1) s11).notPassed).equals(new HashSet<>(((State1) s21).notPassed)));
+    }
     @Override
     public boolean goalTest(State s) {
         State s1 = (State1)s;
+
+        if(((State1) s1).notPassed.isEmpty()) System.out.print("final"+((State1) s1).isPassed+"-");
         return (((State1) s1).notPassed.isEmpty());
     }
 
@@ -306,73 +325,215 @@ public class Problem1 implements Problem {
 //        return out;
 //    }
 
-//    @Override
-//    public ArrayList<Action> actionsBd(State s) {
-//        PouringState ps = (PouringState)s;
-//        // 1 : Fill Flask A
-//        // 2 : Fill Flask B
-//        // 3 : Empty  Flask A
-//        // 4 : Empty Flask B
-//        // 5 : Pour A -> B
-//        // 6 : Pour B -> A
-//
-//        ArrayList<Action> acts = new ArrayList<>();
-//        if(ps.flaskA == CapacityA) acts.add(new Action(1));
-//        if(ps.flaskB == CapacityB) acts.add(new Action(2));
-//        if(ps.flaskA == 0) acts.add(new Action(3));
-//        if(ps.flaskB == 0) acts.add(new Action(4));
-//        if(ps.flaskB != 0 && ps.flaskA != CapacityA) acts.add(new Action(5));
-//        if(ps.flaskA != 0 && ps.flaskB != CapacityB) acts.add(new Action(6));
-//        return acts;
-//    }
+    @Override
+    public ArrayList<Action> actionsBd(State s) {
+        State1 s1 = (State1)s;
+        ArrayList<Action> acts = new ArrayList<>();
+        if(s1.isPassed.contains("A1")) {
+            if(s1.isPassed.contains("A2")) acts.add(new Action(1,"A1,A2"));
+            if(s1.isPassed.contains("B1")) acts.add(new Action(2,"A1,B1"));
+            if(s1.isPassed.contains("C1")) acts.add(new Action(3,"A1,C1"));
+            if(s1.isPassed.contains("D1")) acts.add(new Action(4,"A1,D1"));
+            acts.add(new Action(5,"A1"));}
+        if(s1.isPassed.contains("A2")) {
+            if(s1.isPassed.contains("B2")) acts.add(new Action(6,"A2,B2"));
+            if(s1.isPassed.contains("C2")) acts.add(new Action(7,"A2,C2"));
+            if(s1.isPassed.contains("D2")) acts.add(new Action(8,"A2,D2"));
+            acts.add(new Action(9,"A2"));}
 
-//    @Override
-//    public ArrayList<State> resultBd(State s, Action a) {
-//        PouringState cur = (PouringState)s;
-//        int fa = cur.flaskA;
-//        int fb = cur.flaskB;
-//
-//        ArrayList<State> possibleStates = new ArrayList<>();
-//
-//        switch(a.actionCode){
-//            case 1:
-//                for (int i = 0; i < CapacityA ; i++) {
-//                    possibleStates.add(new PouringState(i,fb));
-//                }
-//                break;
-//            case 2:
-//                for (int i = 0; i < CapacityB ; i++) {
-//                    possibleStates.add(new PouringState(fa,i));
-//                }
-//                break;
-//            case 3:
-//                for (int i = 1 ; i <= CapacityA ; i++) {
-//                    possibleStates.add(new PouringState(i,fb));
-//                }
-//                break;
-//            case 4:
-//                for (int i = 1 ; i <= CapacityB ; i++) {
-//                    possibleStates.add(new PouringState(fa,i));
-//                }
-//                break;
-//            case 5:
-//                while(fa < CapacityA - 1 && fb>0){
-//                    fa++;
-//                    fb--;
-//                    possibleStates.add(new PouringState(fa,fb));
-//                }
-//                break;
-//            case 6:
-//                while(fb < CapacityB - 1 && fa>0){
-//                    fa--;
-//                    fb++;
-//                    possibleStates.add(new PouringState(fa,fb));
-//                }
-//                break;
-//        }
-//
-//        return possibleStates;
-//    }
+        if(s1.isPassed.contains("B1")) {
+            if(s1.isPassed.contains("B2")) acts.add(new Action(10,"B1,B2"));
+            if(s1.isPassed.contains("C1")) acts.add(new Action(11,"B1,C1"));
+            if(s1.isPassed.contains("D1")) acts.add(new Action(12,"B1,D1"));
+            acts.add(new Action(13,"B1"));}
+        if(s1.isPassed.contains("B2")) {
+            if(s1.isPassed.contains("C2")) acts.add(new Action(14,"B2,C2"));
+            if(s1.isPassed.contains("D2")) acts.add(new Action(15,"B2,D2"));
+            acts.add(new Action(16,"B2"));}
+        if(s1.isPassed.contains("C1")) {
+            if(s1.isPassed.contains("C2")) acts.add(new Action(17,"C1,C2"));
+            if(s1.isPassed.contains("D1")) acts.add(new Action(18,"C1,D1"));
+            acts.add(new Action(1,"C1"));}
+        if(s1.isPassed.contains("C2")) {
+            if(s1.isPassed.contains("D2")) acts.add(new Action(20,"C2,D2"));
+            acts.add(new Action(21,"C2"));}
+        if(s1.isPassed.contains("D1")) {
+            if(s1.isPassed.contains("D2")) acts.add(new Action(22,"D1,D2"));
+            acts.add(new Action(23,"D1"));}
+        //jj
+        if(s1.isPassed.contains("D2")) {
+            acts.add(new Action(24,"D2"));}
+        return acts;
+        //jj
+    }
+
+    @Override
+    public ArrayList<State> resultBd(State s, Action a) {
+        State1 current = (State1)s;
+        ArrayList<String> isP=(ArrayList) current.notPassed.clone();
+        ArrayList<String> notP=(ArrayList) current.isPassed.clone();
+
+        switch(a.actionType){
+            case 1:
+                notP.remove("A1");
+                notP.remove("A2");
+                isP.add("A1");
+                isP.add("A2");
+
+                break;
+            case 2:
+                notP.remove("A1");
+                notP.remove("B1");
+                isP.add("A1");
+                isP.add("B1");
+                break;
+            case 3:
+                notP.remove("A1");
+                notP.remove("C1");
+                isP.add("A1");
+                isP.add("C1");
+                break;
+            case 4:
+                notP.remove("A1");
+                notP.remove("D1");
+                isP.add("A1");
+                isP.add("D1");
+                break;
+            case 5:
+                notP.remove("A1");
+
+                isP.add("A1");
+
+                break;
+            case 6:
+                notP.remove("A2");
+                notP.remove("B2");
+                isP.add("A2");
+                isP.add("B2");
+                break;
+            case 7:
+                notP.remove("A2");
+                notP.remove("C2");
+                isP.add("A2");
+                isP.add("C2");
+                break;
+            case 8:
+                notP.remove("A1");
+                notP.remove("D2");
+                isP.add("A1");
+                isP.add("D2");
+                break;
+            case 9:
+                notP.remove("A2");
+
+                isP.add("A2");
+
+                break;
+            case 10:
+                notP.remove("B1");
+                notP.remove("B2");
+                isP.add("B1");
+                isP.add("B2");
+                break;
+            case 11:
+                notP.remove("B1");
+                notP.remove("C1");
+                isP.add("B1");
+                isP.add("C1");
+                break;
+            case 12:
+                notP.remove("B1");
+                notP.remove("D1");
+                isP.add("B1");
+                isP.add("D1");
+                break;
+            case 13:
+                notP.remove("B1");
+
+                isP.add("B1");
+
+                break;
+            case 14:
+                notP.remove("B2");
+                notP.remove("C2");
+                isP.add("B2");
+                isP.add("C2");
+                break;
+            case 15:
+                notP.remove("B2");
+                notP.remove("D2");
+                isP.add("B2");
+                isP.add("D2");
+                break;
+            case 16:
+                notP.remove("B2");
+
+                isP.add("B2");
+
+                break;
+            case 17:
+                notP.remove("C1");
+                notP.remove("C2");
+                isP.add("C1");
+                isP.add("C2");
+                break;
+            case 18:
+                notP.remove("C1");
+                notP.remove("D1");
+                isP.add("C1");
+                isP.add("D1");
+                break;
+            case 19:
+                notP.remove("C1");
+
+                isP.add("C1");
+
+                break;
+            case 20:
+                notP.remove("C2");
+                notP.remove("D2");
+                isP.add("C2");
+                isP.add("D2");
+                break;
+            case 21:
+                notP.remove("C2");
+
+                isP.add("C2");
+
+                break;
+            case 22:
+                notP.remove("D1");
+                notP.remove("D2");
+                isP.add("D1");
+                isP.add("D2");
+                break;
+            case 23:
+                notP.remove("D1");
+
+                isP.add("D1");
+
+                break;
+            case 24:
+                notP.remove("D2");
+
+                isP.add("D2");
+
+                break;
+
+        }
+
+        ArrayList<State> nextState = new ArrayList<>();
+        nextState.add(new State1(notP,isP));
+        System.out.print("action1: ");
+        nextState.get(0).print();
+
+        for (String i: isP){
+            System.out.print(i+"-");
+        }
+
+
+        return nextState;
+    }
 
 
 }

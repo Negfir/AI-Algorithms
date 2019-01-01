@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public interface Problem {
 
 
-
+int getNode();
 
     State initialState();
 
@@ -20,7 +20,17 @@ public interface Problem {
 
     int heuristic(State s);
 
+//    int Depth();
+//    int Depth();
+
     State goalState();
+
+    ArrayList<Action> actionsBd(State s);
+
+    ArrayList<State> resultBd(State s,Action a);
+
+    boolean goalTestBi(State s1,State s2);
+
 //
 //    ArrayList<Action> actionsBd(State s);
 //
